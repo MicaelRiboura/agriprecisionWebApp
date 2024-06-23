@@ -1,8 +1,11 @@
 import './App.css'
+import { Base } from './components/base'
 
 function App() {
   return (
-    <h1>Hello World</h1>
+    <Base>
+      <h1>Hello World</h1>
+    </Base>
   )
 }
 
