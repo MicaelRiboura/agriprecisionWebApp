@@ -1,13 +1,13 @@
-import './App.css'
-import { Base } from './components/base'
-import { Home } from './modules/overview/pages/home'
+import { BrowserRouter } from 'react-router-dom';
+import './App.css';
+import { Router } from './router';
 
 function App() {
   return (
-    <Base>
-      <Home />
-    </Base>
-  )
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 }
 
 export default App
