@@ -1,9 +1,9 @@
-import { MdOutlineAllInbox, MdOutlineEco } from 'react-icons/md';
+import { MdOutlineAllInbox, MdOutlineEco, MdOutlineHistory } from 'react-icons/md';
 import logo from '../../assets/logo.svg';
 
 export function Sidebar() {
     return (
-        <aside id="sidebar" className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform" aria-label="Sidebar">
+        <aside id="sidebar" className="h-screen w-64 transition-transform" aria-label="Sidebar">
             <div className="flex h-full flex-col overflow-y-auto border-r border-slate-200 bg-white px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
                 <div className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white">
                     <img src={logo} />
@@ -15,7 +15,7 @@ export function Sidebar() {
                                 <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                                 <polyline points="9 22 9 12 15 12 15 22" />
                             </svg>
-                            <span className="ml-3 flex-1 whitespace-nowrap">Home</span>
+                            <span className="ml-3 flex-1 whitespace-nowrap">Início</span>
                         </a>
                     </li>
                     <li>
@@ -28,6 +28,12 @@ export function Sidebar() {
                         <a href={'/'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
                             <MdOutlineAllInbox className="text-xl" />
                             <span className="ml-3 flex-1 whitespace-nowrap">Insumos agrícolas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href={'/'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
+                            <MdOutlineHistory className="text-xl" />
+                            <span className="ml-3 flex-1 whitespace-nowrap">Histórico de Colheitas</span>
                         </a>
                     </li>
                 </ul>
