@@ -3,11 +3,9 @@ import { Sidebar } from "./ui/sidebar";
 
 export function Base({ children }: Readonly<PropsWithChildren>) {
     return (
-        <div className="grid grid-cols-6">
-            <div>
-                <Sidebar />
-            </div>
-            <div className="grid-col-span-5">
+        <div className="flex">
+            <Sidebar />
+            <div className="grow p-8">
                 {children}
             </div>
         </div>
