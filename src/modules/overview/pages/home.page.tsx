@@ -67,7 +67,7 @@ export function Home() {
                     <Card className="mt-4">
                         <CardHeader>
                             <CardTitle>
-                                Principais Insumos
+                                Insumos necessários
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
