@@ -10,7 +10,7 @@ export function Home() {
                 <div className="col-span-3">
                     <Card>
                         <CardHeader>
-                            <CardTitle>
+                            <CardTitle className="text-primary">
                                 Mapa de Produtividade
                             </CardTitle>
                             <CardDescription>
@@ -29,16 +29,16 @@ export function Home() {
                 <div>
                     <Card>
                         <CardHeader>
-                            <CardTitle>
+                            <CardTitle className="text-primary">
                                 Temperatura
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="font-bold text-center">
+                            <div className="font-bold text-center text-gray-700">
                                 <span className="text-6xl">30</span>
                                 <span className="text-4xl">°C</span>
                             </div>
-                            <div className="flex w-full pt-4">
+                            <div className="flex w-full pt-4 text-gray-700">
                                 <div className="w-1/3 flex justify-center border-r">
                                 <div className="flex items-center">
                                     <IoWaterOutline />
@@ -66,7 +66,7 @@ export function Home() {
                     </Card>
                     <Card className="mt-4">
                         <CardHeader>
-                            <CardTitle>
+                            <CardTitle className="text-primary">
                                 Insumos necessários
                             </CardTitle>
                         </CardHeader>
