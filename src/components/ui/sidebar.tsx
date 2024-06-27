@@ -10,26 +10,26 @@ export function Sidebar() {
                     <img src={logo} />
                 </div>
                 <ul className="space-y-2 text-sm font-medium">
-                    <li >
-                        <NavLink to={'/'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
+                    <li>
+                        <NavLink to={'/'} className={({ isActive }) => (isActive ? 'flex items-center rounded-lg px-3 py-2 bg-slate-100 text-green-700' : 'flex items-center rounded-lg px-3 py-2 text-slate-900 hover:text-green-700 dark:text-white dark:hover:bg-slate-700')}>
                             <MdOutlineSpaceDashboard className="text-xl" />
                             <span className="ml-3 flex-1 whitespace-nowrap">Dashboard</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink  to={'/fields'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
+                        <NavLink  to={'/fields'} className={({ isActive }) => (isActive ? 'flex items-center rounded-lg px-3 py-2 bg-slate-100 text-green-700' : 'flex items-center rounded-lg px-3 py-2 text-slate-900 hover:text-green-700 dark:text-white dark:hover:bg-slate-700')}>
                             <MdOutlineEco className="text-xl" />
                             <span className="ml-3 flex-1 whitespace-nowrap">Talhões</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink  to={'/agro-inputs'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
+                        <NavLink  to={'/agro-inputs'} className={({ isActive }) => (isActive ? 'flex items-center rounded-lg px-3 py-2 bg-slate-100 text-green-700' : 'flex items-center rounded-lg px-3 py-2 text-slate-900 hover:text-green-700 dark:text-white dark:hover:bg-slate-700')}>
                             <MdOutlineAllInbox className="text-xl" />
                             <span className="ml-3 flex-1 whitespace-nowrap">Insumos agrícolas</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink  to={'/harvest-history'} className="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 hover:text-green-700 dark:text-white dark:hover:bg-slate-700">
+                        <NavLink  to={'/harvest-history'} className={({ isActive }) => (isActive ? 'flex items-center rounded-lg px-3 py-2 bg-slate-100 text-green-700' : 'flex items-center rounded-lg px-3 py-2 text-slate-900 hover:text-green-700 dark:text-white dark:hover:bg-slate-700')}>
                             <MdOutlineHistory className="text-xl" />
                             <span className="ml-3 flex-1 whitespace-nowrap">Histórico de Colheitas</span>
                         </NavLink>
