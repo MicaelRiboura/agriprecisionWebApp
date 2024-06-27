@@ -1,13 +1,16 @@
+import { NavLink } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
-import { Payment, columns } from "../components/field-table/columns";
-import { DataTable } from "../components/field-table/data-table";
+import { Payment, columns } from "../components/harvest-history-table/columns";
+import { DataTable } from "../components/harvest-history-table/data-table";
 
 export function HarvestHistoryPage() {
     return (
         <div>
             <h1 className="text-3xl font-bold mb-4">Histórico de Colheitas</h1>
             <div className="flex items-center justify-end my-3">
-                <Button>Registrar Nova Colheita</Button>
+                <NavLink to={'/harvest-history/create'}>
+                    <Button>Registrar Nova Colheita</Button>
+                </NavLink>
             </div>
             <div className="w-full">
                 <DataTable columns={columns} data={[

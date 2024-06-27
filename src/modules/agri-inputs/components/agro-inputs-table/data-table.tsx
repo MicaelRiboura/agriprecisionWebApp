@@ -16,6 +16,7 @@ import {
     TableRow,
 } from "../../../../components/ui/table"
 import { Button } from "../../../../components/ui/button"
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -34,7 +35,7 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <div className="rounded-md border">
+        <div className="rounded-md border bg-white">
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -84,7 +85,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
                 >
-                    Previous
+                    <IoIosArrowBack />
                 </Button>
                 <Button
                     variant="outline"
@@ -92,7 +93,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
                 >
-                    Next
+                    <IoIosArrowForward />
                 </Button>
             </div>
 
