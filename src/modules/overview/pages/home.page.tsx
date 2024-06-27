@@ -69,14 +69,14 @@ export function Home() {
                                         <GiClockwork />
                                         <h3 className="ml-1 ont-medium text-md">Pressão</h3>
                                     </div>
-                                    <p className="font-bold">{weatherData?.current?.temp_c}<span className="text-xs font-medium ml-1">mmHg</span></p>
+                                    <p className="font-bold">{weatherData?.current?.pressure_mb}<span className="text-xs font-medium ml-1">mb</span></p>
                                 </div>
                                 <div className="w-1/3 flex items-center flex-col">
                                     <div className="flex items-center">
                                         <FaWind />
                                         <h3 className="ml-1 font-medium text-md">Vento</h3>
                                     </div>
-                                    <p className="font-bold">{weatherData?.current?.temp_c}<span className="text-xs font-medium ml-1">km/h</span></p>
+                                    <p className="font-bold">{weatherData?.current?.wind_mph}<span className="text-xs font-medium ml-1">mph</span></p>
                                 </div>
                             </div>
                         </CardContent>
