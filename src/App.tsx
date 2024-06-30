@@ -1,9 +1,15 @@
-import './App.css'
+import { BrowserRouter } from 'react-router-dom';
+import './App.css';
+import { Router } from './router';
 
 function App() {
+  const test = import.meta.env.VITE_WHEATHER_API_KEY;
+  console.log(`${test}`)
   return (
-    <h1>Hello World</h1>
-  )
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 }
 
 export default App
