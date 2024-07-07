@@ -6,38 +6,60 @@ import { Button } from "../../../components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "../../../components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import { FieldDataService } from "../data-services/field.data-service";
+import { useToast } from "../../../components/ui/use-toast";
 
 
 const formSchema = z.object({
-    username: z.string().min(2).max(50),
-    name: z.string().min(2).max(50),
-    plantation: z.string().min(2).max(50),
-    area: z.number().min(1),
+    planting: z.string().min(2).max(50),
+    area: z.coerce.number().min(1),
 });
 
 export function FieldPage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            plantation: "",
+            planting: "",
             area: 0,
         },
     });
 
+    const navigate = useNavigate();
+    const { toast } = useToast();
+
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        const fieldDataService = new FieldDataService();
+        console.log({
+            area: values.area,
+            planting: values.planting,
+            user: 'micael@gmail.com',
+        })
+        fieldDataService.create({
+            area: values.area,
+            planting: values.planting,
+            user: 'micael@gmail.com',
+        }).then(() => {
+            toast({
+                title: 'Talhão criado com sucesso!',
+            });
+    
+            navigate('/fields');
+        });
     }
 
     return (
@@ -55,29 +77,23 @@ export function FieldPage() {
                     <h1 className="text-2xl font-bold mb-3 text-primary">Talhão</h1>
                     <FormField
                         control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nome</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Nome de preferência para identificar esse talhão.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="plantation"
+                        name="planting"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Plantação</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione uma plantação para o seu talhão" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Soja">Soja</SelectItem>
+                                        <SelectItem value="Milho">Milho</SelectItem>
+                                        <SelectItem value="Cana-de-açúcar">Cana-de-açúcar</SelectItem>
+                                        <SelectItem value="Feijão">Feijão</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
