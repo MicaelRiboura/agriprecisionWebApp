@@ -1,5 +1,6 @@
 import { CreateHarvestRequestDTO } from '../dtos/create-harvest-request.dto';
 import { HarvestDTO } from '../dtos/harvest.dto';
+import { MapProductivityDTO } from '../dtos/map-productivity.dto';
 
 class HarvestDataService {
 
@@ -27,6 +28,12 @@ class HarvestDataService {
         });
         const response: { history: HarvestDTO[] } = await responseJSON.json();
         return response;
+    }
+
+    async mapProductivity(user: string): Promise<MapProductivityDTO[]> {
+        const responseJSON = await fetch(`${import.meta.env.VITE_HARVEST_API_URL}/harvest-history/map-productivity?user=${user}`);
+        const response: { fields: MapProductivityDTO[] } = await responseJSON.json();
+        return response.fields;
     }
 }
 

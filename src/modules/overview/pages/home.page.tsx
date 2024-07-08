@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import { WeatherAPIDataService } from "../data-services/weather-api.data-service";
 import { WeatherCurrentDTO } from "../dtos/weather-current.dto";
 import { GiClockwork } from "react-icons/gi";
+import { MdOutlineEco } from "react-icons/md";
+import { HarvestDataService } from "../../field/data-services/harvest.data-service";
+import { MapProductivityDTO } from "../../field/dtos/map-productivity.dto";
+import { plantingRequest } from "../../../fixdata/planting-necessity";
 
 export function Home() {
     const [weatherData, setWeatherData] = useState<WeatherCurrentDTO | undefined>(undefined);
+    const [mapFields, setMapFields] = useState<MapProductivityDTO[] | undefined>(undefined);
 
     async function loadWeather() {
         const weatherService = new WeatherAPIDataService();
@@ -16,8 +21,34 @@ export function Home() {
         setWeatherData(weatherDataResponse);
     }
 
+    async function loadMapProductivity() {
+        const harvestDataService = new HarvestDataService();
+        const mapResponse = await harvestDataService.mapProductivity('micael@gmail.com');
+        setMapFields(mapResponse);
+    }
+
+    function setStatusOfField(field: MapProductivityDTO) {
+        const requests = plantingRequest[field.planting];
+        if (weatherData) {
+            if (weatherData.current.temp_c <= requests.minTempC || weatherData.current.temp_c >= requests.maxTempC) {
+                return 'absolute bg-red-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+            }
+
+            if (field.average > 30) {
+                return 'absolute bg-green-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+            } else if (field.average == 30) {
+                return 'absolute bg-yellow-500 opacity-50 w-full h-full cursor-pointer rounded-sm';
+            } else {
+                return 'absolute bg-blue-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+            }
+        }
+
+        return 'absolute bg-gray-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+    }
+
     useEffect(() => {
         loadWeather();
+        loadMapProductivity();
     }, []);
 
     return (
@@ -36,9 +67,39 @@ export function Home() {
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-wrap">
-                                {Array.from({ length: 12 }).map((_, i) => (
-                                    <div key={i} className="h-72 w-44 bg-slate-100 m-1"></div>
-                                ))}
+                                {(mapFields && mapFields?.length > 0) && mapFields.map((field, i) => (
+                                    <div
+                                        key={i} 
+                                        className="h-72 w-44 bg-slate-100 m-1 relative rounded-sm" 
+                                        style={{
+                                            backgroundImage: "url('/src/assets/soil.jpg')",
+                                            backgroundSize: '100%'
+                                        }}
+                                    >
+                                        <div className={setStatusOfField(field)}></div>
+                                        <div className="absolute flex items-center space-x-2 bg-white p-2 rounded-sm m-4 -right-5 shadow-md border">
+                                            <MdOutlineEco className="text-xl text-primary" /> <span className="font-bold text-gray-500 text-sm">{field.planting}</span>
+                                        </div>
+                                    </div>
+                                )) || (<p className="text-gray-700 font-bold text-xl">Nenhum talhão cadastrado</p>)}
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                <div className="px-1 pt-4 flex items-center">
+                                    <div className="h-4 w-4 bg-green-300 mr-1 rounded-sm"></div>
+                                    <span className="text-gray-500 text-md">Produtividade Alta</span>
+                                </div>
+                                <div className="px-1 pt-4 flex items-center">
+                                    <div className="h-4 w-4 bg-yellow-300 mr-1 rounded-sm"></div>
+                                    <span className="text-gray-500 text-md">Produtividade Média</span>
+                                </div>
+                                <div className="px-1 pt-4 flex items-center">
+                                    <div className="h-4 w-4 bg-blue-300 mr-1 rounded-sm"></div>
+                                    <span className="text-gray-500 text-md">Produtividade Baixa</span>
+                                </div>
+                                <div className="px-1 pt-4 flex items-center">
+                                    <div className="h-4 w-4 bg-red-300 mr-1 rounded-sm"></div>
+                                    <span className="text-gray-500 text-md">Solo impróprio</span>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
@@ -84,12 +145,18 @@ export function Home() {
                     <Card className="mt-4">
                         <CardHeader>
                             <CardTitle className="text-primary">
-                                Insumos necessários
+                                Solo próprio para plantio
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p>Água: <span>200l</span></p>
-                            <p>Fertilizante: <span>2</span></p>
+                            <h4 className="text-lg font-bold text-gray-500">Milho</h4>
+                            <p className="ml-2 text-md text-gray-700">Temperatura entre {plantingRequest['Milho'].minTempC}°C e {plantingRequest['Milho'].maxTempC}°C</p>
+                            <h4 className="text-lg font-bold text-gray-500">Soja</h4>
+                            <p className="ml-2 text-md text-gray-700">Temperatura entre {plantingRequest['Soja'].minTempC}°C e {plantingRequest['Soja'].maxTempC}°C</p>
+                            <h4 className="text-lg font-bold text-gray-500">Cana-de-açúcar</h4>
+                            <p className="ml-2 text-md text-gray-700">Temperatura entre {plantingRequest['Cana-de-açúcar'].minTempC}°C e {plantingRequest['Cana-de-açúcar'].maxTempC}°C</p>
+                            <h4 className="text-lg font-bold text-gray-500">Feijão</h4>
+                            <p className="ml-2 text-md text-gray-700">Temperatura entre {plantingRequest['Feijão'].minTempC}°C e {plantingRequest['Feijão'].maxTempC}°C</p>
                         </CardContent>
                     </Card>
                 </div>
