@@ -26,6 +26,18 @@ class FieldDataService {
         const response: { field: FieldDTO } = await responseJSON.json();
         return response.field;
     }
+
+    async update(data: FieldDTO): Promise<void> {
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, String(value));
+        });
+
+        await fetch(`${import.meta.env.VITE_HARVEST_API_URL}/fields/edit`, {
+            method: "PUT",
+            body: formData,
+        });
+    }
 }
 
 export { FieldDataService };

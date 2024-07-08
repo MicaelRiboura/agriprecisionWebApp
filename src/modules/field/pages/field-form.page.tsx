@@ -62,22 +62,33 @@ export function FieldPage() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const fieldDataService = new FieldDataService();
-        console.log({
-            area: values.area,
-            planting: values.planting,
-            user: 'micael@gmail.com',
-        })
-        fieldDataService.create({
-            area: values.area,
-            planting: values.planting,
-            user: 'micael@gmail.com',
-        }).then(() => {
-            toast({
-                title: 'Talhão criado com sucesso!',
+        
+        if (id) {
+            fieldDataService.update({
+                id: parseInt(id),
+                area: values.area,
+                planting: values.planting,
+                user: 'micael@gmail.com',
+            }).then(() => {
+                toast({
+                    title: 'Talhão atualizado com sucesso!',
+                });
+
+                navigate('/fields');
             });
-    
-            navigate('/fields');
-        });
+        } else {
+            fieldDataService.create({
+                area: values.area,
+                planting: values.planting,
+                user: 'micael@gmail.com',
+            }).then(() => {
+                toast({
+                    title: 'Talhão criado com sucesso!',
+                });
+        
+                navigate('/fields');
+            });
+        }
     }
 
     return (
