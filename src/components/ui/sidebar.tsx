@@ -1,6 +1,6 @@
 import { 
     // MdOutlineAllInbox, 
-    MdOutlineEco, MdOutlineHistory, MdOutlineSpaceDashboard } from 'react-icons/md';
+    MdOutlineEco, MdOutlineSpaceDashboard } from 'react-icons/md';
 import logo from '../../assets/logo.svg';
 import { NavLink } from 'react-router-dom';
 
@@ -30,12 +30,6 @@ export function Sidebar() {
                             <span className="ml-3 flex-1 whitespace-nowrap">Insumos agrícolas</span>
                         </NavLink>
                     </li> */}
-                    <li>
-                        <NavLink  to={'/harvest-history'} className={({ isActive }) => (isActive ? 'flex items-center rounded-lg px-3 py-2 bg-slate-100 text-green-700' : 'flex items-center rounded-lg px-3 py-2 text-slate-900 hover:text-green-700 dark:text-white dark:hover:bg-slate-700')}>
-                            <MdOutlineHistory className="text-xl" />
-                            <span className="ml-3 flex-1 whitespace-nowrap">Histórico de Colheitas</span>
-                        </NavLink>
-                    </li>
                 </ul>
             </div>
         </aside>
