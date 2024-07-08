@@ -20,6 +20,12 @@ class FieldDataService {
             body: formData,
         });
     }
+
+    async get(id: number, user: string): Promise<FieldDTO> {
+        const responseJSON = await fetch(`${import.meta.env.VITE_HARVEST_API_URL}/fields/one?user=${user}&id=${id}`);
+        const response: { field: FieldDTO } = await responseJSON.json();
+        return response.field;
+    }
 }
 
 export { FieldDataService };

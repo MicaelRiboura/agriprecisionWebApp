@@ -15,6 +15,7 @@ export function Router() {
                 <Route path="/" element={<Home />} />
                 <Route path="/fields" element={<FieldsList />} />
                 <Route path="/fields/create" element={<FieldPage />} />
+                <Route path="/fields/:id" element={<FieldPage />} />
                 <Route path="/agro-inputs" element={<AgroInputsPage />} />
                 <Route path="/agro-inputs/create" element={<AgroInputPage />} />
                 <Route path="/harvest-history" element={<HarvestHistoryPage />} />

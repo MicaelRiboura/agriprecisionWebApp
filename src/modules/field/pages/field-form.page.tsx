@@ -19,10 +19,11 @@ import {
     SelectValue,
 } from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { FieldDataService } from "../data-services/field.data-service";
 import { useToast } from "../../../components/ui/use-toast";
+import { useCallback, useEffect } from "react";
 
 
 const formSchema = z.object({
@@ -31,13 +32,30 @@ const formSchema = z.object({
 });
 
 export function FieldPage() {
+    const { id } = useParams();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            planting: "",
-            area: 0,
+            area: 10,
+            planting: '',
         },
     });
+
+    const loadField = useCallback(async (id: number | undefined) => {
+        const fieldDataService = new FieldDataService();
+        if (id) {
+            const responseField = await fieldDataService.get(id, 'micael@gmail.com');
+            console.log(responseField.planting);
+            form.setValue('planting', responseField.planting);
+            form.setValue('area', responseField.area);
+            
+        }
+    }, [form]);
+
+    useEffect(() => {
+        loadField(id ? parseInt(id) : undefined);
+    }, [id, loadField]);
 
     const navigate = useNavigate();
     const { toast } = useToast();
@@ -81,7 +99,7 @@ export function FieldPage() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Plantação</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecione uma plantação para o seu talhão" />
