@@ -38,6 +38,12 @@ class FieldDataService {
             body: formData,
         });
     }
+
+    async delete(id: number, user: string): Promise<void> {
+        await fetch(`${import.meta.env.VITE_HARVEST_API_URL}/fields/delete?id=${id}&user=${user}`, {
+            method: "DELETE"
+        });
+    }
 }
 
 export { FieldDataService };

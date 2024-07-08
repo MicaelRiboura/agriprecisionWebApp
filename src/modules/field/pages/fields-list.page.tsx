@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
-import { columns } from "../components/field-table/columns";
+import { generateColumns } from "../components/field-table/columns";
 import { DataTable } from "../components/field-table/data-table";
 import { useEffect, useState } from "react";
 import { FieldDataService } from "../data-services/field.data-service";
 import { FieldDTO } from "../dtos/field.dto";
+import { toast } from "../../../components/ui/use-toast";
 
 export function FieldsList() {
     const [fields, setFields] = useState<FieldDTO[] | undefined>(undefined);
@@ -13,6 +14,16 @@ export function FieldsList() {
         const fieldDataService = new FieldDataService();
         const fieldsDataResponse = await fieldDataService.list('micael@gmail.com');
         setFields(fieldsDataResponse.fields);
+    }
+
+    function deleteField(id: number) {
+        const fieldDataService = new FieldDataService();
+        fieldDataService.delete(id, 'micael@gmail.com').then(() => {
+            toast({
+                title: 'Talhão removido com sucesso!',
+            });
+            loadFieldsList();
+        });
     }
 
     useEffect(() => {
@@ -28,7 +39,7 @@ export function FieldsList() {
                 </NavLink>
             </div>
             <div className="w-full">
-                <DataTable columns={columns} data={fields || ([] as FieldDTO[])} />
+                <DataTable columns={generateColumns(deleteField)} data={fields || ([] as FieldDTO[])} />
             </div>
         </div>
     )

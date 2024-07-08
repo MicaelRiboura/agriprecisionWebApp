@@ -7,31 +7,34 @@ import { NavLink } from "react-router-dom";
 // You can use a Zod schema here if you want.
 
 
-export const columns: ColumnDef<FieldDTO>[] = [
-    {
-        accessorKey: "area",
-        header: "Área",
-    },
-    {
-        accessorKey: "planting",
-        header: "Plantação",
-    },
-    {
-        id: "actions",
-        header: 'Ações',
-        enableHiding: false,
-        cell: ({ row }) => {
-        const id = row.original.id;
-
-            return (
-                <div className="flex space-x-4 text-xl">
-                    <NavLink to={`/fields/${id}`}>
-                        <FiEdit className="text-yellow-600 cursor-pointer" />
-
-                    </NavLink>
-                    <FiTrash2 className="text-red-500 cursor-pointer" onClick={() => console.log('delete', id)} />
-                </div>
-            )
+export const generateColumns = (deleteAction: (id: number) => void = () => undefined) => {
+    const columns: ColumnDef<FieldDTO>[] = [
+        {
+            accessorKey: "area",
+            header: "Área",
         },
-    },
-]
+        {
+            accessorKey: "planting",
+            header: "Plantação",
+        },
+        {
+            id: "actions",
+            header: 'Ações',
+            enableHiding: false,
+            cell: ({ row }) => {
+                const id = row.original.id;
+
+                return (
+                    <div className="flex space-x-4 text-xl">
+                        <NavLink to={`/fields/${id}`}>
+                            <FiEdit className="text-yellow-600 cursor-pointer" />
+                        </NavLink>
+                        <FiTrash2 className="text-red-500 cursor-pointer" onClick={() => deleteAction(id)} />
+                    </div>
+                )
+            },
+        },
+    ];
+
+    return columns;
+}
