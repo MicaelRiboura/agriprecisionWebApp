@@ -42,7 +42,7 @@ export function HarvestHistoryPage() {
                 <NavLink to={'/fields'}>
                     <Button variant={'link'}><IoIosArrowBack className="mr-1" /> Voltar</Button>
                 </NavLink>
-                <NavLink to={'/fields/harvest-history/create'}>
+                <NavLink to={`/fields/${fieldId}/harvest-history/create`}>
                     <Button>Registrar Nova Colheita</Button>
                 </NavLink>
             </div>

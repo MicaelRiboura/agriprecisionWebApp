@@ -19,7 +19,7 @@ export function Router() {
                 {/* <Route path="/agro-inputs" element={<AgroInputsPage />} />
                 <Route path="/agro-inputs/create" element={<AgroInputPage />} /> */}
                 <Route path="/fields/:fieldId/harvest-history" element={<HarvestHistoryPage />} />
-                <Route path="fields/harvest-history/create" element={<HarvestPage />} />
+                <Route path="fields/:fieldId/harvest-history/create" element={<HarvestPage />} />
             </Route>
         </Routes>
     )
