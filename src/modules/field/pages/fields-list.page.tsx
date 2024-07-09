@@ -6,29 +6,36 @@ import { useEffect, useState } from "react";
 import { FieldDataService } from "../data-services/field.data-service";
 import { FieldDTO } from "../dtos/field.dto";
 import { toast } from "../../../components/ui/use-toast";
+import { useAuth } from "../../user/hooks/auth-context.hook";
 
 export function FieldsList() {
     const [fields, setFields] = useState<FieldDTO[] | undefined>(undefined);
+    const { email } = useAuth();
 
     async function loadFieldsList() {
-        const fieldDataService = new FieldDataService();
-        const fieldsDataResponse = await fieldDataService.list('micael@gmail.com');
-        setFields(fieldsDataResponse.fields);
+        if (email) {
+            const fieldDataService = new FieldDataService();
+            const fieldsDataResponse = await fieldDataService.list(email);
+            setFields(fieldsDataResponse.fields);
+        }
     }
 
     function deleteField(id: number) {
-        const fieldDataService = new FieldDataService();
-        fieldDataService.delete(id, 'micael@gmail.com').then(() => {
-            toast({
-                title: 'Talhão removido com sucesso!',
+        if (email) {
+            const fieldDataService = new FieldDataService();
+            fieldDataService.delete(id, email).then(() => {
+                toast({
+                    title: 'Talhão removido com sucesso!',
+                });
+                loadFieldsList();
             });
-            loadFieldsList();
-        });
+        }
     }
 
     useEffect(() => {
         loadFieldsList();
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [email]);
 
     return (
         <div>

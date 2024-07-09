@@ -25,6 +25,7 @@ import { FieldDataService } from "../data-services/field.data-service";
 import { useToast } from "../../../components/ui/use-toast";
 import { useCallback, useEffect } from "react";
 import { MdOutlineHistory } from "react-icons/md";
+import { useAuth } from "../../user/hooks/auth-context.hook";
 
 
 const formSchema = z.object({
@@ -36,6 +37,7 @@ export function FieldPage() {
     const { id } = useParams();
     const searchParamsState = useSearchParams();
     const searchParams = searchParamsState[0];
+    const { email } = useAuth();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,14 +49,14 @@ export function FieldPage() {
 
     const loadField = useCallback(async (id: number | undefined) => {
         const fieldDataService = new FieldDataService();
-        if (id) {
-            const responseField = await fieldDataService.get(id, 'micael@gmail.com');
+        if (id && email) {
+            const responseField = await fieldDataService.get(id, email);
             console.log(responseField.planting);
             form.setValue('planting', responseField.planting);
             form.setValue('area', responseField.area);
             
         }
-    }, [form]);
+    }, [form, email]);
 
     useEffect(() => {
         loadField(id ? parseInt(id) : undefined);
@@ -65,32 +67,33 @@ export function FieldPage() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const fieldDataService = new FieldDataService();
-        
-        if (id) {
-            fieldDataService.update({
-                id: parseInt(id),
-                area: values.area,
-                planting: values.planting,
-                user: 'micael@gmail.com',
-            }).then(() => {
-                toast({
-                    title: 'Talhão atualizado com sucesso!',
+        if (email) {
+            if (id) {
+                fieldDataService.update({
+                    id: parseInt(id),
+                    area: values.area,
+                    planting: values.planting,
+                    user: email,
+                }).then(() => {
+                    toast({
+                        title: 'Talhão atualizado com sucesso!',
+                    });
+    
+                    navigate('/fields');
                 });
-
-                navigate('/fields');
-            });
-        } else {
-            fieldDataService.create({
-                area: values.area,
-                planting: values.planting,
-                user: 'micael@gmail.com',
-            }).then(() => {
-                toast({
-                    title: 'Talhão criado com sucesso!',
+            } else {
+                fieldDataService.create({
+                    area: values.area,
+                    planting: values.planting,
+                    user: email,
+                }).then(() => {
+                    toast({
+                        title: 'Talhão criado com sucesso!',
+                    });
+            
+                    navigate('/fields');
                 });
-        
-                navigate('/fields');
-            });
+            }
         }
     }
 

@@ -12,11 +12,13 @@ import { plantingRequest } from "../../../fixdata/planting-necessity";
 import { NavLink } from "react-router-dom";
 import { Input } from "../../../components/ui/input";
 import { Label } from "@radix-ui/react-label";
+import { useAuth } from "../../user/hooks/auth-context.hook";
 
 export function Home() {
     const [weatherData, setWeatherData] = useState<WeatherCurrentDTO | undefined>(undefined);
     const [mapFields, setMapFields] = useState<MapProductivityDTO[] | undefined>(undefined);
     const [paramProduction, setParamProduction] = useState<number>(40);
+    const { email } = useAuth();
 
     async function loadWeather() {
         const weatherService = new WeatherAPIDataService();
@@ -27,8 +29,10 @@ export function Home() {
 
     async function loadMapProductivity() {
         const harvestDataService = new HarvestDataService();
-        const mapResponse = await harvestDataService.mapProductivity('micael@gmail.com');
-        setMapFields(mapResponse);
+        if (email){
+            const mapResponse = await harvestDataService.mapProductivity(email);
+            setMapFields(mapResponse);
+        }
     }
 
     function setStatusOfField(field: MapProductivityDTO) {
@@ -53,7 +57,7 @@ export function Home() {
     useEffect(() => {
         loadWeather();
         loadMapProductivity();
-    }, []);
+    }, [email]);
 
     return (
         <div>
@@ -61,7 +65,7 @@ export function Home() {
             <div className="grid grid-cols-4 gap-4">
                 <div className="col-span-3">
                     <Card>
-                        <CardHeader>
+                        <CardHeader className="pt-2 pb-1">
                             <CardTitle className="text-primary">
                                 Mapa de Produtividade
                             </CardTitle>
@@ -70,8 +74,8 @@ export function Home() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="my-4 w-64">
-                                <Label htmlFor="average_production" className="text-sm text-gray-500">Média de produção:</Label>
+                            <div className="my-1 w-64">
+                                <Label htmlFor="average_production" className="text-sm text-gray-500">Média parâmetro de colheita:</Label>
                                 <Input id="average_production" type="number" value={paramProduction} onChange={(event) => setParamProduction(parseInt(event.target.value))}/>
                             </div>
                             <div className="flex flex-wrap">

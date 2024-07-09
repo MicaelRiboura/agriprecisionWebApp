@@ -18,6 +18,7 @@ import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-d
 import { IoIosArrowBack } from "react-icons/io";
 import { HarvestDataService } from "../data-services/harvest.data-service";
 import { useToast } from "../../../components/ui/use-toast";
+import { useAuth } from "../../user/hooks/auth-context.hook";
 
 
 const formSchema = z.object({
@@ -32,6 +33,8 @@ export function HarvestPage() {
     const navigate = useNavigate();
     const { toast } = useToast();
 
+    const { email } = useAuth();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -44,18 +47,20 @@ export function HarvestPage() {
     function onSubmit(values: z.infer<typeof formSchema>) {
         if (fieldId) {
             const harvestDataService = new HarvestDataService();
-            harvestDataService.create({
-                date: values.harvestDate,
-                total_production: values.totalProduction,
-                user: 'micael@gmail.com',
-                field: parseInt(fieldId),
-            }).then(() => {
-                toast({
-                    title: 'Registro de colheita criado com sucesso!',
+            if (email) {
+                harvestDataService.create({
+                    date: values.harvestDate,
+                    total_production: values.totalProduction,
+                    user: email,
+                    field: parseInt(fieldId),
+                }).then(() => {
+                    toast({
+                        title: 'Registro de colheita criado com sucesso!',
+                    });
+        
+                    navigate(`/fields/${fieldId}/harvest-history`);
                 });
-    
-                navigate(`/fields/${fieldId}/harvest-history`);
-            });
+            }
         }
     }
 
