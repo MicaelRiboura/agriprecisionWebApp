@@ -142,14 +142,14 @@ export function Home() {
                                     <h3 className="ml-1 font-medium text-md">Umidade</h3>
                                 </div>
 
-                                    <p className="font-bold">{weatherData?.current?.humidity}<span className="text-xs font-medium ml-1">g/m³</span></p>
+                                    <p className="font-bold">{weatherData?.current?.humidity}<span className="text-xs font-medium ml-1">%</span></p>
                                 </div>
                                 <div className="w-1/3 flex items-center flex-col border-r">
                                     <div className="flex items-center">
                                         <GiClockwork />
                                         <h3 className="ml-1 ont-medium text-md">Pressão</h3>
                                     </div>
-                                    <p className="font-bold">{weatherData?.current?.pressure_mb}<span className="text-xs font-medium ml-1">mb</span></p>
+                                    <p className="font-bold">{weatherData?.current?.pressure_in}<span className="text-xs font-medium ml-1">hPa</span></p>
                                 </div>
                                 <div className="w-1/3 flex items-center flex-col">
                                     <div className="flex items-center">

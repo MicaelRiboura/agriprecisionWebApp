@@ -38,7 +38,7 @@ export type WeatherCurrentDTO = {
 class WeatherAPIDataService {
 
     async getCurrentWeather() {
-        const responseJSON = await fetch(`${import.meta.env.VITE_WHEATHER_API_URL}/current.json?q=Rio%20de%20Janeiro&key=${import.meta.env.VITE_WHEATHER_API_KEY}`);
+        const responseJSON = await fetch(`${import.meta.env.VITE_WEATHER_API_URL}/current.json?q=Rio%20de%20Janeiro&key=${import.meta.env.VITE_WEATHER_API_KEY}`);
         const response: WheatherResponseCurrent = await responseJSON.json();
         return response;
     }
