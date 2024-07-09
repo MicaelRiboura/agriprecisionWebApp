@@ -6,78 +6,134 @@ import { Button } from "../../../components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "../../../components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import { FieldDataService } from "../data-services/field.data-service";
+import { useToast } from "../../../components/ui/use-toast";
+import { useCallback, useEffect } from "react";
+import { MdOutlineHistory } from "react-icons/md";
 
 
 const formSchema = z.object({
-    username: z.string().min(2).max(50),
-    name: z.string().min(2).max(50),
-    plantation: z.string().min(2).max(50),
-    area: z.number().min(1),
+    planting: z.string().min(2).max(50),
+    area: z.coerce.number().min(1),
 });
 
 export function FieldPage() {
+    const { id } = useParams();
+    const searchParamsState = useSearchParams();
+    const searchParams = searchParamsState[0];
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            plantation: "",
-            area: 0,
+            area: 50000,
+            planting: '',
         },
     });
 
+    const loadField = useCallback(async (id: number | undefined) => {
+        const fieldDataService = new FieldDataService();
+        if (id) {
+            const responseField = await fieldDataService.get(id, 'micael@gmail.com');
+            console.log(responseField.planting);
+            form.setValue('planting', responseField.planting);
+            form.setValue('area', responseField.area);
+            
+        }
+    }, [form]);
+
+    useEffect(() => {
+        loadField(id ? parseInt(id) : undefined);
+    }, [id, loadField]);
+
+    const navigate = useNavigate();
+    const { toast } = useToast();
+
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        const fieldDataService = new FieldDataService();
+        
+        if (id) {
+            fieldDataService.update({
+                id: parseInt(id),
+                area: values.area,
+                planting: values.planting,
+                user: 'micael@gmail.com',
+            }).then(() => {
+                toast({
+                    title: 'Talhão atualizado com sucesso!',
+                });
+
+                navigate('/fields');
+            });
+        } else {
+            fieldDataService.create({
+                area: values.area,
+                planting: values.planting,
+                user: 'micael@gmail.com',
+            }).then(() => {
+                toast({
+                    title: 'Talhão criado com sucesso!',
+                });
+        
+                navigate('/fields');
+            });
+        }
     }
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="flex items-center justify-start mb-12">
-                <NavLink to={'/fields'}>
-                    <Button>
-                        <IoIosArrowBack />
+            <div className="flex items-center justify-between mb-12">
+                <NavLink to={searchParams.get('dashboard') == 'true' ? `/` : '/fields'}>
+                    <Button variant={'link'}>
+                        <IoIosArrowBack className="text-lg" />
                         <span className="ml-2">Voltar</span>
                     </Button>
                 </NavLink>
+                {id && (
+                    <NavLink to={searchParams.get('dashboard') == 'true' ? `/fields/${id}/harvest-history?dashboard=true` : `/fields/${id}/harvest-history`}>
+                        <Button>
+                            <MdOutlineHistory className="text-lg" />
+                            <span className="ml-2">Histórico de colheita</span>
+                        </Button>
+                    </NavLink>
+                )}
             </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 bg-white rounded  p-8 lg:p-12">
                     <h1 className="text-2xl font-bold mb-3 text-primary">Talhão</h1>
                     <FormField
                         control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nome</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Nome de preferência para identificar esse talhão.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="plantation"
+                        name="planting"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Plantação</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione uma plantação para o seu talhão" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Soja">Soja</SelectItem>
+                                        <SelectItem value="Milho">Milho</SelectItem>
+                                        <SelectItem value="Cana-de-açúcar">Cana-de-açúcar</SelectItem>
+                                        <SelectItem value="Feijão">Feijão</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -89,7 +145,7 @@ export function FieldPage() {
                             <FormItem>
                                 <FormLabel>Área</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input type="number" {...field} min="50000" max="300000" step="1000" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

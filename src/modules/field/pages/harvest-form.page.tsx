@@ -14,37 +14,56 @@ import {
     FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import { HarvestDataService } from "../data-services/harvest.data-service";
+import { useToast } from "../../../components/ui/use-toast";
 
 
 const formSchema = z.object({
     harvestDate: z.string(),
-    humidity: z.coerce.number().min(1, "Valor da umidade deve ser acima de 0."),
     totalProduction: z.coerce.number().min(1, "Valor do total de produção deve ser acima de 0."),
 })
 
 export function HarvestPage() {
+    const { fieldId } = useParams();
+    const searchParamsState = useSearchParams();
+    const searchParams = searchParamsState[0];
+    const navigate = useNavigate();
+    const { toast } = useToast();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             harvestDate: "",
-            humidity: 0,
             totalProduction: 0,
         },
-    })
+    });
+
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        if (fieldId) {
+            const harvestDataService = new HarvestDataService();
+            harvestDataService.create({
+                date: values.harvestDate,
+                total_production: values.totalProduction,
+                user: 'micael@gmail.com',
+                field: parseInt(fieldId),
+            }).then(() => {
+                toast({
+                    title: 'Registro de colheita criado com sucesso!',
+                });
+    
+                navigate(`/fields/${fieldId}/harvest-history`);
+            });
+        }
     }
 
     return (
         <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-start mb-12">
-                <NavLink to={'/harvest-history'}>
-                    <Button>
+                <NavLink to={searchParams.get('dashboard') == 'true' ? `/fields/${fieldId}/harvest-history?dashboard=true` : `/fields/${fieldId}/harvest-history`}>
+                    <Button variant={'link'}>
                         <IoIosArrowBack />
                         <span className="ml-2">Voltar</span>
                     </Button>
@@ -68,23 +87,10 @@ export function HarvestPage() {
                     />
                     <FormField
                         control={form.control}
-                        name="humidity"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Umidade do Solo</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
                         name="totalProduction"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Total de Produção</FormLabel>
+                                <FormLabel>Total de Produção (Unidades)</FormLabel>
                                 <FormControl>
                                     <Input type="number" {...field} />
                                 </FormControl>

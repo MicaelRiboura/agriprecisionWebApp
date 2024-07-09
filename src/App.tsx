@@ -1,13 +1,13 @@
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import { Router } from './router';
+import { Toaster } from './components/ui/toaster';
 
 function App() {
-  const test = import.meta.env.VITE_WHEATHER_API_KEY;
-  console.log(`${test}`)
   return (
     <BrowserRouter>
       <Router />
+      <Toaster />
     </BrowserRouter>
   );
 }
