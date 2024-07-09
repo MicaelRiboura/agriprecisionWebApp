@@ -59,7 +59,7 @@ VITE_HARVEST_API_URL=
 VITE_USER_API_URL=
 ```
 
-> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
+> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
 
 ### 3 - Criando a imagem Docker
 Primeiro, você deve criar uma imagem Docker com o seguinte comando:
@@ -103,7 +103,7 @@ VITE_HARVEST_API_URL=
 VITE_USER_API_URL=
 ```
 
-> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
+> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
 
 #
 
