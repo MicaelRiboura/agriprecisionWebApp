@@ -9,10 +9,14 @@ import { MdOutlineEco } from "react-icons/md";
 import { HarvestDataService } from "../../field/data-services/harvest.data-service";
 import { MapProductivityDTO } from "../../field/dtos/map-productivity.dto";
 import { plantingRequest } from "../../../fixdata/planting-necessity";
+import { NavLink } from "react-router-dom";
+import { Input } from "../../../components/ui/input";
+import { Label } from "@radix-ui/react-label";
 
 export function Home() {
     const [weatherData, setWeatherData] = useState<WeatherCurrentDTO | undefined>(undefined);
     const [mapFields, setMapFields] = useState<MapProductivityDTO[] | undefined>(undefined);
+    const [paramProduction, setParamProduction] = useState<number>(40);
 
     async function loadWeather() {
         const weatherService = new WeatherAPIDataService();
@@ -31,19 +35,19 @@ export function Home() {
         const requests = plantingRequest[field.planting];
         if (weatherData) {
             if (weatherData.current.temp_c <= requests.minTempC || weatherData.current.temp_c >= requests.maxTempC) {
-                return 'absolute bg-red-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+                return 'absolute bg-red-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
             }
 
-            if (field.average > 30) {
-                return 'absolute bg-green-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
-            } else if (field.average == 30) {
-                return 'absolute bg-yellow-500 opacity-50 w-full h-full cursor-pointer rounded-sm';
+            if (field.average > paramProduction) {
+                return 'absolute bg-green-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
+            } else if (field.average == paramProduction) {
+                return 'absolute bg-yellow-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
             } else {
-                return 'absolute bg-blue-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+                return 'absolute bg-blue-400 opacity-40 w-full h-full cursor-pointer rounded-sm';
             }
         }
 
-        return 'absolute bg-gray-300 opacity-50 w-full h-full cursor-pointer rounded-sm';
+        return 'absolute bg-gray-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
     }
 
     useEffect(() => {
@@ -66,21 +70,32 @@ export function Home() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
+                            <div className="my-4 w-64">
+                                <Label htmlFor="average_production" className="text-sm text-gray-500">Média de produção:</Label>
+                                <Input id="average_production" type="number" value={paramProduction} onChange={(event) => setParamProduction(parseInt(event.target.value))}/>
+                            </div>
                             <div className="flex flex-wrap">
                                 {(mapFields && mapFields?.length > 0) && mapFields.map((field, i) => (
-                                    <div
-                                        key={i} 
-                                        className="h-72 w-44 bg-slate-100 m-1 relative rounded-sm" 
-                                        style={{
-                                            backgroundImage: "url('/src/assets/soil.jpg')",
-                                            backgroundSize: '100%'
-                                        }}
-                                    >
-                                        <div className={setStatusOfField(field)}></div>
-                                        <div className="absolute flex items-center space-x-2 bg-white p-2 rounded-sm m-4 -right-5 shadow-md border">
-                                            <MdOutlineEco className="text-xl text-primary" /> <span className="font-bold text-gray-500 text-sm">{field.planting}</span>
+                                    <NavLink to={`/fields/${field.field}?dashboard=true`}>
+                                        <div
+                                            key={i} 
+                                            className="h-72 w-44 bg-slate-100 m-1 relative rounded-sm" 
+                                            style={{
+                                                backgroundImage: "url('/src/assets/soil.jpg')",
+                                                backgroundSize: '100%'
+                                            }}
+                                        >
+                                            <div className={setStatusOfField(field)}></div>
+                                            <div className="absolute bg-white p-2 rounded-sm m-4 -right-5 shadow-md border">
+                                                <div className="flex items-center space-x-2">
+                                                    <MdOutlineEco className="text-xl text-primary" /> <span className="font-bold text-gray-500 text-sm">{field.planting}</span>
+                                                </div>
+                                                <div className="text-xs text-right text-gray-500">
+                                                    <span className="font-bold">ID:</span> {field.field}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </NavLink>
                                 )) || (<p className="text-gray-700 font-bold text-xl">Nenhum talhão cadastrado</p>)}
                             </div>
                             <div className="flex items-center space-x-4">
@@ -145,7 +160,7 @@ export function Home() {
                     <Card className="mt-4">
                         <CardHeader>
                             <CardTitle className="text-primary">
-                                Solo próprio para plantio
+                                Condições das Plantações
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

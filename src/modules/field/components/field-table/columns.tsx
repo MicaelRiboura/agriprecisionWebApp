@@ -13,8 +13,17 @@ import {
 export const generateColumns = (deleteAction: (id: number) => void = () => undefined) => {
     const columns: ColumnDef<FieldDTO>[] = [
         {
+            accessorKey: "id",
+            header: "ID",
+        },
+        {
             accessorKey: "area",
             header: "Área",
+            cell: ({ cell }) => {
+                return (
+                    <p>{String(cell.getValue())} m²</p>
+                );
+            }
         },
         {
             accessorKey: "planting",

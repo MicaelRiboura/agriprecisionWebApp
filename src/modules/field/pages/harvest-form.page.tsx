@@ -14,7 +14,7 @@ import {
     FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { HarvestDataService } from "../data-services/harvest.data-service";
 import { useToast } from "../../../components/ui/use-toast";
@@ -27,6 +27,8 @@ const formSchema = z.object({
 
 export function HarvestPage() {
     const { fieldId } = useParams();
+    const searchParamsState = useSearchParams();
+    const searchParams = searchParamsState[0];
     const navigate = useNavigate();
     const { toast } = useToast();
 
@@ -60,8 +62,8 @@ export function HarvestPage() {
     return (
         <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-start mb-12">
-                <NavLink to={`/fields/${fieldId}/harvest-history`}>
-                    <Button>
+                <NavLink to={searchParams.get('dashboard') == 'true' ? `/fields/${fieldId}/harvest-history?dashboard=true` : `/fields/${fieldId}/harvest-history`}>
+                    <Button variant={'link'}>
                         <IoIosArrowBack />
                         <span className="ml-2">Voltar</span>
                     </Button>

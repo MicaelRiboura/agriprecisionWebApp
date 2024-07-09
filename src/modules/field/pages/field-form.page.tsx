@@ -19,11 +19,12 @@ import {
     SelectValue,
 } from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { FieldDataService } from "../data-services/field.data-service";
 import { useToast } from "../../../components/ui/use-toast";
 import { useCallback, useEffect } from "react";
+import { MdOutlineHistory } from "react-icons/md";
 
 
 const formSchema = z.object({
@@ -33,11 +34,13 @@ const formSchema = z.object({
 
 export function FieldPage() {
     const { id } = useParams();
+    const searchParamsState = useSearchParams();
+    const searchParams = searchParamsState[0];
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            area: 10,
+            area: 50000,
             planting: '',
         },
     });
@@ -93,13 +96,21 @@ export function FieldPage() {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="flex items-center justify-start mb-12">
-                <NavLink to={'/fields'}>
-                    <Button>
-                        <IoIosArrowBack />
+            <div className="flex items-center justify-between mb-12">
+                <NavLink to={searchParams.get('dashboard') == 'true' ? `/` : '/fields'}>
+                    <Button variant={'link'}>
+                        <IoIosArrowBack className="text-lg" />
                         <span className="ml-2">Voltar</span>
                     </Button>
                 </NavLink>
+                {id && (
+                    <NavLink to={searchParams.get('dashboard') == 'true' ? `/fields/${id}/harvest-history?dashboard=true` : `/fields/${id}/harvest-history`}>
+                        <Button>
+                            <MdOutlineHistory className="text-lg" />
+                            <span className="ml-2">Histórico de colheita</span>
+                        </Button>
+                    </NavLink>
+                )}
             </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 bg-white rounded  p-8 lg:p-12">
@@ -134,7 +145,7 @@ export function FieldPage() {
                             <FormItem>
                                 <FormLabel>Área</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} />
+                                    <Input type="number" {...field} min="50000" max="300000" step="1000" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
