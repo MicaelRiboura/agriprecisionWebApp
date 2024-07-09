@@ -9,6 +9,7 @@ import { HarvestDTO } from "../dtos/harvest.dto";
 import { toast } from "../../../components/ui/use-toast";
 import { FieldDTO } from "../dtos/field.dto";
 import { FieldDataService } from "../data-services/field.data-service";
+import { useAuth } from "../../user/hooks/auth-context.hook";
 
 export function HarvestHistoryPage() {
     const [harvestHistory, setHarvestHistory] = useState<HarvestDTO[] | undefined>(undefined);
@@ -17,31 +18,37 @@ export function HarvestHistoryPage() {
     const { fieldId } = useParams();
     const searchParamsState = useSearchParams();
     const searchParams = searchParamsState[0];
+    const { email } = useAuth();
 
     async function loadHarvestHistoryAndField() {
-        const harvestDataService = new HarvestDataService();
-        const fieldParam = fieldId ? parseInt(fieldId) : 0;
-        const harvestHistoryDataResponse = await harvestDataService.list(fieldParam, 'micael@gmail.com');
-        setHarvestHistory(harvestHistoryDataResponse.history);
-
-        const fieldDataService = new FieldDataService();
-        const responseField = await fieldDataService.get(fieldParam, 'micael@gmail.com');
-        setField(responseField);
+        if (email) {
+            const harvestDataService = new HarvestDataService();
+            const fieldParam = fieldId ? parseInt(fieldId) : 0;
+            const harvestHistoryDataResponse = await harvestDataService.list(fieldParam, email);
+            setHarvestHistory(harvestHistoryDataResponse.history);
+    
+            const fieldDataService = new FieldDataService();
+            const responseField = await fieldDataService.get(fieldParam, email);
+            setField(responseField);
+        }
     }
 
     function deleteHarvest(id: number) {
-        const fieldDataService = new HarvestDataService();
-        fieldDataService.delete(id, 'micael@gmail.com').then(() => {
-            toast({
-                title: 'Registro de colheita removido com sucesso!',
+        if (email) {
+            const fieldDataService = new HarvestDataService();
+            fieldDataService.delete(id, email).then(() => {
+                toast({
+                    title: 'Registro de colheita removido com sucesso!',
+                });
+                loadHarvestHistoryAndField();
             });
-            loadHarvestHistoryAndField();
-        });
+        }
     }
 
     useEffect(() => {
         loadHarvestHistoryAndField();
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [email]);
 
 
     return (
