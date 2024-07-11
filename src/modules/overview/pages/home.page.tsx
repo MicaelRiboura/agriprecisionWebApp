@@ -38,7 +38,7 @@ export function Home() {
     function setStatusOfField(field: MapProductivityDTO) {
         const requests = plantingRequest[field.planting];
         if (weatherData && requests) {
-            if (weatherData.current.temp_c <= requests.minTempC || weatherData.current.temp_c >= requests.maxTempC) {
+            if (weatherData.current.temp_c < requests.minTempC || weatherData.current.temp_c > requests.maxTempC) {
                 return 'absolute bg-red-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
             }
 
@@ -149,14 +149,14 @@ export function Home() {
                                         <GiClockwork />
                                         <h3 className="ml-1 ont-medium text-md">Pressão</h3>
                                     </div>
-                                    <p className="font-bold">{weatherData?.current?.pressure_in}<span className="text-xs font-medium ml-1">hPa</span></p>
+                                    <p className="font-bold">{weatherData?.current?.pressure_in}<span className="text-xs font-medium ml-1">Polegadas</span></p>
                                 </div>
                                 <div className="w-1/3 flex items-center flex-col">
                                     <div className="flex items-center">
                                         <FaWind />
                                         <h3 className="ml-1 font-medium text-md">Vento</h3>
                                     </div>
-                                    <p className="font-bold">{weatherData?.current?.wind_mph}<span className="text-xs font-medium ml-1">mph</span></p>
+                                    <p className="font-bold">{weatherData?.current?.wind_kph}<span className="text-xs font-medium ml-1">km/h</span></p>
                                 </div>
                             </div>
                         </CardContent>

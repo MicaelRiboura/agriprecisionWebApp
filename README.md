@@ -35,7 +35,7 @@ O projeto foi desenvolvido em uma arquitetura baseada em microsserviços, na qua
 - **Aplicação Front-end (Repositório Atual)**
 - [Serviço de Colheitas em Talhões](https://github.com/MicaelRiboura/agriPrecisionHarvestService)
 -  [Serviço de Autenticação de Usuário](https://github.com/MicaelRiboura/agriPrecisionUserService)
--  [Serviço de Clima de Open Weather API](./weather-api.docs.md)
+-  [Serviço de Clima de Weather API](./weather-api.docs.md)
 
 ## Como executar a aplicação com Docker
 
@@ -59,7 +59,7 @@ VITE_HARVEST_API_URL=
 VITE_USER_API_URL=
 ```
 
-> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
+> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://www.weatherapi.com/docs/.
 
 ### 3 - Criando a imagem Docker
 Primeiro, você deve criar uma imagem Docker com o seguinte comando:
@@ -103,7 +103,7 @@ VITE_HARVEST_API_URL=
 VITE_USER_API_URL=
 ```
 
-> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://openweathermap.org/api.
+> ⚠️ Atenção! Esse exemplo possui apenas as chaves sem valores. Para conseguir executar a aplicação sem nenhum problema, é necessário que preencha manualmente os valores, como os endereços dos microsserviços executando em sua máquina e sua chave de OpenWeather API que pode ser adquirida em https://www.weatherapi.com/docs/.
 
 #
 
