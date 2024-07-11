@@ -37,7 +37,7 @@ export function Home() {
 
     function setStatusOfField(field: MapProductivityDTO) {
         const requests = plantingRequest[field.planting];
-        if (weatherData) {
+        if (weatherData && requests) {
             if (weatherData.current.temp_c <= requests.minTempC || weatherData.current.temp_c >= requests.maxTempC) {
                 return 'absolute bg-red-300 opacity-40 w-full h-full cursor-pointer rounded-sm';
             }
@@ -80,7 +80,7 @@ export function Home() {
                             </div>
                             <div className="flex flex-wrap">
                                 {(mapFields && mapFields?.length > 0) && mapFields.map((field, i) => (
-                                    <NavLink to={`/fields/${field.field}?dashboard=true`}>
+                                    <NavLink key={field.field} to={`/fields/${field.field}?dashboard=true`}>
                                         <div
                                             key={i} 
                                             className="h-72 w-44 bg-slate-100 m-1 relative rounded-sm" 
