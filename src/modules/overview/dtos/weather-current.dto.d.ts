@@ -1,4 +1,5 @@
 export type WeatherCurrentDTO = {
+    error?: object;
     current: {
         cloud: number;
         condition: {
